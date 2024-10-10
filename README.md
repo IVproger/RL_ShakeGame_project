@@ -34,19 +34,19 @@ To set up and run the project locally, follow these steps:
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/your-repo/snake-rl.git
-   cd snake-rl
+   git clone git@github.com:IVproger/RL_ShakeGame_project.git
+   cd RL_ShakeGame_project
    ```
 
 2. **Create a virtual environment** (optional but recommended):
    ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+   python -m venv .venv
+   source .venv/bin/activate  # On Windows use `.venv\Scripts\activate`
    ```
 
 3. **Install the required dependencies**:
    ```bash
-   pip install -r requirements.txt
+   pip install -Ur requirements.txt
    ```
 
 4. **Run the game and algorithms**:
