@@ -32,6 +32,8 @@ Each algorithm has been tested with various hyperparameters, and their performan
 ## Project Setup
 To set up and run the project locally, follow these steps:
 
+> **Note**: This project requires Python version **3.11 or higher**.
+
 1. **Clone the repository**:
    ```bash
    git clone git@github.com:IVproger/RL_ShakeGame_project.git
@@ -48,13 +50,6 @@ To set up and run the project locally, follow these steps:
    ```bash
    pip install -Ur requirements.txt
    ```
-
-4. **Run the game and algorithms**:
-   ```bash
-   python main.py
-   ```
-
-Feel free to modify the configurations, reward functions, or algorithms in the code to explore different behaviors of the RL agent.
 
 ## References
 - [Snake Game Genetic Algorithm with TensorFlow by Mauro Comi](https://github.com/maurock/snake-ga-tf/tree/master)
