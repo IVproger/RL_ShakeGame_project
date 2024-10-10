@@ -1,5 +1,3 @@
-Here's a basic structure for your `README.md` file:
-
 ---
 
 # Snake Game with Reinforcement Learning
@@ -36,8 +34,8 @@ To set up and run the project locally, follow these steps:
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/your-repo/snake-rl.git
-   cd snake-rl
+   git clone git@github.com:IVproger/RL_ShakeGame_project.git
+   cd RL_ShakeGame_project
    ```
 
 2. **Create a virtual environment** (optional but recommended):
