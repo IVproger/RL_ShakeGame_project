@@ -18,16 +18,16 @@ class SnakeEnv(gym.Env):
 
     def reset(self):
         self.snake = [(self.grid_size // 2, self.grid_size // 2)]  # Initial snake position
+        self.free_cells = set((x, y) for x in range(self.grid_size) for y in range(self.grid_size))
+        self.free_cells.remove(self.snake[0])
         self.food = self._place_food()
         self.direction = 1  # Initial direction: Right
         self.done = False
         return self._get_observation()
 
     def _place_food(self):
-        while True:
-            food_pos = (random.randint(0, self.grid_size - 1), random.randint(0, self.grid_size - 1))
-            if food_pos not in self.snake:
-                return food_pos
+        food_pos = random.choice(list(self.free_cells))
+        return food_pos
 
     def _get_observation(self):
         obs = np.zeros((self.grid_size, self.grid_size, 3), dtype=np.float32)
@@ -74,11 +74,19 @@ class SnakeEnv(gym.Env):
 
         # Update snake position
         self.snake.insert(0, new_head)
+        self.free_cells.remove(new_head)
+
+        if len(self.free_cells) == 0:
+            self.done = True
+            reward = 100
+            return self._get_observation(), reward, self.done, {}
+
         if new_head == self.food:
             reward = 1
             self.food = self._place_food()  # Place new food
         else:
-            self.snake.pop()
+            tail = self.snake.pop()
+            self.free_cells.add(tail)
             reward = 0
 
         return self._get_observation(), reward, self.done, {}
@@ -93,5 +101,3 @@ class SnakeEnv(gym.Env):
                 else:
                     print('.', end=' ')
             print()
-        print()
-        

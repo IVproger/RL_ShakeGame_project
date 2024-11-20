@@ -2,3 +2,4 @@ ipykernel
 gym
 torch
 gymnasium
+tqdm
