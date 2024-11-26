@@ -4,7 +4,7 @@ from gymnasium import spaces
 import random
 
 class SimpleSnakeEnv(gym.Env):
-    def __init__(self, grid_size=10, food_reward=10, collision_reward=-10, final_reward=100):
+    def __init__(self, grid_size=10, food_reward=75, collision_reward=-75, final_reward=200):
         super(SimpleSnakeEnv, self).__init__()
         self.grid_size = grid_size
         self.action_space = spaces.Discrete(4)  # 0: Up, 1: Right, 2: Down, 3: Left
@@ -138,6 +138,7 @@ class SimpleSnakeEnv(gym.Env):
         # Calculate distance-based reward
         current_distance = self._calculate_distance(new_head, self.food)
         distance_reward = self.previous_distance - current_distance
+        # distance_reward = 0
 
         if new_head == self.food:
             reward = self.food_reward + distance_reward  # Extra reward for eating food
