@@ -101,9 +101,7 @@ class SnakeEnv(gym.Env):
             tail = self.snake.pop()
             self.free_cells.add(tail)
             reward = distance_reward
-
-        # Update the previous distance
-        self.previous_distance = current_distance
+            self.previous_distance = current_distance  # Update the previous distance
 
         return self._get_observation(), reward, self.done, {}
 
