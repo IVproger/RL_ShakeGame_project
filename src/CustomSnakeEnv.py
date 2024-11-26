@@ -147,7 +147,7 @@ class SnakeEnv(gym.Env):
         pygame.quit()
 
 def human_mode():
-    env = SnakeEnv(grid_size=5)
+    env = SnakeEnv(grid_size=10)
     env.reset()
     
     action = env.RIGHT  # Start with the RIGHT action
