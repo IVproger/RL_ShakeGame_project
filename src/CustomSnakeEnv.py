@@ -6,18 +6,18 @@ import pygame
 import time
 
 class SnakeEnv(gym.Env):
-    
+
     # Define the actions
     UP = 0    #!< Move up
     RIGHT = 1 #!< Move right
     DOWN = 2  #!< Move down
     LEFT = 3  #!< Move left
 
-    def __init__(self, grid_size=10, food_reward=10, collision_reward=-10, final_reward=100,interact=True):
+    def __init__(self, grid_size=10, food_reward=75, collision_reward=-75, final_reward=200, interact=True):
         super(SnakeEnv, self).__init__()
         self.grid_size = grid_size
         self.action_space = spaces.Discrete(4)  # 0: Up, 1: Right, 2: Down, 3: Left
-        self.observation_space = spaces.Box(0, 1, (grid_size, grid_size, 3), dtype=np.float32)
+        self.observation_space = spaces.Box(0, 1, (11,), dtype=np.float32)
         self.seed()
         self.reset()
         self.food_reward = food_reward
@@ -57,11 +57,57 @@ class SnakeEnv(gym.Env):
         return food_pos
 
     def _get_observation(self):
-        obs = np.zeros((self.grid_size, self.grid_size, 3), dtype=np.float32)
-        for x, y in self.snake:
-            obs[x, y] = [0, 1, 0]  # Snake body in green
-        obs[self.food[0], self.food[1]] = [1, 0, 0]  # Food in red
-        return obs
+        # Snake head position
+        head_x, head_y = self.snake[0]
+
+        # Direction vectors for movement
+        directions = {
+            0: (-1, 0),  # Up
+            1: (0, 1),   # Right
+            2: (1, 0),   # Down
+            3: (0, -1)   # Left
+        }
+
+        # Danger detection (collision risk in each direction)
+        danger_straight = self._is_danger(head_x + directions[self.direction][0], head_y + directions[self.direction][1])
+        danger_right = self._is_danger(
+            head_x + directions[(self.direction + 1) % 4][0],
+            head_y + directions[(self.direction + 1) % 4][1]
+        )
+        danger_left = self._is_danger(
+            head_x + directions[(self.direction - 1) % 4][0],
+            head_y + directions[(self.direction - 1) % 4][1]
+        )
+
+        # Current direction (one-hot encoding)
+        direction_up = int(self.direction == 0)
+        direction_right = int(self.direction == 1)
+        direction_down = int(self.direction == 2)
+        direction_left = int(self.direction == 3)
+
+        # Food direction
+        food_x, food_y = self.food
+        food_up = int(food_x < head_x)
+        food_down = int(food_x > head_x)
+        food_left = int(food_y < head_y)
+        food_right = int(food_y > head_y)
+
+        # Concatenate all features into a single state vector
+        state = np.array([
+            danger_straight, danger_right, danger_left,
+            direction_up, direction_right, direction_down, direction_left,
+            food_up, food_down, food_left, food_right
+        ], dtype=np.float32)
+
+        return state
+    
+    def _is_danger(self, x, y):
+        """Helper function to check if a position is a danger (wall or snake body)."""
+        return (
+            x < 0 or y < 0 or
+            x >= self.grid_size or y >= self.grid_size or
+            (x, y) in self.snake
+    )
 
     def _calculate_distance(self, position, food_position):
         """Calculate Manhattan distance between the snake's head and the food."""
