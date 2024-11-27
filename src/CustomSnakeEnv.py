@@ -171,7 +171,6 @@ class SnakeEnv(gym.Env):
         # Calculate distance-based reward
         current_distance = self._calculate_distance(new_head, self.food)
         distance_reward = self.previous_distance - current_distance
-        # distance_reward = 0
 
         if new_head == self.food:
             reward = self.food_reward + distance_reward  # Extra reward for eating food
