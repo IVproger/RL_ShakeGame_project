@@ -20,12 +20,13 @@ class SnakeEnv(gym.Env):
         self.observation_space = spaces.Box(0, 1, (11,), dtype=np.float32)
         self.seed()
         self.reset()
+        self.interact = interact
         self.food_reward = food_reward
         self.collision_reward = collision_reward
         self.final_reward = final_reward
 
         # Pygame initialization
-        if interact:
+        if self.interact:
             pygame.init()
             self.screen_size = 500
             self.cell_size = self.screen_size // self.grid_size
@@ -206,7 +207,9 @@ class SnakeEnv(gym.Env):
         self.clock.tick(10)  # Control the frame rate
 
     def close(self):
-        pygame.quit()
+        if self.interact:
+            pygame.display.quit()
+            pygame.quit()
 
 def human_mode():
     env = SnakeEnv(grid_size=10)
