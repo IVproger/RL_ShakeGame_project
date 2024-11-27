@@ -127,17 +127,33 @@ class SnakeEnv(gym.Env):
         if self.done:
             raise RuntimeError("Step called after environment is done")
 
-        # Update direction based on action
-        self._change_direction(action)
+        # Update direction
+        if action == 0 and self.direction != 2:  # Up
+            self.direction = 0
+        elif action == 1 and self.direction != 3:  # Right
+            self.direction = 1
+        elif action == 2 and self.direction != 0:  # Down
+            self.direction = 2
+        elif action == 3 and self.direction != 1:  # Left
+            self.direction = 3
 
         # Calculate new head position
         head_x, head_y = self.snake[0]
-        new_head = (head_x + self.direction[0], head_y + self.direction[1])
+        if self.direction == 0:  # Up
+            head_x -= 1
+        elif self.direction == 1:  # Right
+            head_y += 1
+        elif self.direction == 2:  # Down
+            head_x += 1
+        elif self.direction == 3:  # Left
+            head_y -= 1
+
+        new_head = (head_x, head_y)
 
         # Check for collisions
         if (
-            new_head[0] < 0 or new_head[1] < 0 or
-            new_head[0] >= self.grid_size or new_head[1] >= self.grid_size or
+            head_x < 0 or head_y < 0 or
+            head_x >= self.grid_size or head_y >= self.grid_size or
             new_head in self.snake
         ):
             self.done = True
@@ -155,6 +171,7 @@ class SnakeEnv(gym.Env):
         # Calculate distance-based reward
         current_distance = self._calculate_distance(new_head, self.food)
         distance_reward = self.previous_distance - current_distance
+        # distance_reward = 0
 
         if new_head == self.food:
             reward = self.food_reward + distance_reward  # Extra reward for eating food
