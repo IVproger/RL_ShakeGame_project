@@ -14,7 +14,23 @@ class SnakeEnv(gym.Env):
     LEFT = 3  #!< Move left
 
     def __init__(self, grid_size=10, food_reward=75, collision_reward=-75, final_reward=200, interact=True):
+        '''
+        Initialize the Snake environment.
+        Params
+        grid_size : int
+            Size of the grid.
+        food_reward : int
+            Reward for eating food.
+        collision_reward : int
+            Penalty for colliding with walls or itself.
+        final_reward : int
+            Reward for filling the grid.
+        interact : bool
+            Whether to enable interactive mode with Pygame.
+        '''
         super(SnakeEnv, self).__init__()
+        
+        # Environment parameters
         self.grid_size = grid_size
         self.action_space = spaces.Discrete(4)  # 0: Up, 1: Right, 2: Down, 3: Left
         self.observation_space = spaces.Box(0, 1, (11,), dtype=np.float32)
@@ -24,6 +40,7 @@ class SnakeEnv(gym.Env):
         self.food_reward = food_reward
         self.collision_reward = collision_reward
         self.final_reward = final_reward
+        self.direction = None
 
         # Pygame initialization
         if self.interact:
@@ -35,10 +52,22 @@ class SnakeEnv(gym.Env):
             self.clock = pygame.time.Clock()
 
     def seed(self, seed=None):
+        '''
+        Seed the environment's random number generator.
+        Params
+        seed : int
+            Seed for the random number generator.
+        '''
         random.seed(seed)
         np.random.seed(seed)
 
     def reset(self):
+        '''
+        Reset the environment to its initial state.
+        Returns
+        observation : np.array
+            Initial observation of the environment.
+        '''
         # Randomly initialize the snake's position
         initial_position = (random.randint(0, self.grid_size - 1), random.randint(0, self.grid_size - 1))
         self.snake = [initial_position]  # Initial snake position
@@ -54,10 +83,22 @@ class SnakeEnv(gym.Env):
         return self._get_observation()
 
     def _place_food(self):
+        '''
+        Place the food in a random free cell.
+        Returns
+        food_pos : tuple
+            Position of the food.
+        '''
         food_pos = random.choice(list(self.free_cells))
         return food_pos
 
     def _get_observation(self):
+        '''
+        Get the current observation of the environment.
+        Returns
+        state : np.array
+            Current state of the environment.
+        '''
         # Snake head position
         head_x, head_y = self.snake[0]
 
@@ -103,18 +144,44 @@ class SnakeEnv(gym.Env):
         return state
     
     def _is_danger(self, x, y):
-        """Helper function to check if a position is a danger (wall or snake body)."""
+        '''
+        Helper function to check if a position is a danger (wall or snake body).
+        Params
+        x : int
+            X-coordinate of the position.
+        y : int
+            Y-coordinate of the position.
+        Returns
+        bool
+            True if the position is a danger, False otherwise.
+        '''
         return (
             x < 0 or y < 0 or
             x >= self.grid_size or y >= self.grid_size or
             (x, y) in self.snake
-    )
+        )
 
     def _calculate_distance(self, position, food_position):
-        """Calculate Manhattan distance between the snake's head and the food."""
+        '''
+        Calculate Manhattan distance between the snake's head and the food.
+        Params
+        position : tuple
+            Position of the snake's head.
+        food_position : tuple
+            Position of the food.
+        Returns
+        int
+            Manhattan distance between the snake's head and the food.
+        '''
         return abs(position[0] - food_position[0]) + abs(position[1] - food_position[1])
 
     def _change_direction(self, action):
+        '''
+        Change the direction of the snake based on the action.
+        Params
+        action : int
+            Action to change the direction.
+        '''
         if action == self.UP:
             self.direction = (-1, 0)  # Move up
         elif action == self.RIGHT:
@@ -125,6 +192,21 @@ class SnakeEnv(gym.Env):
             self.direction = (0, -1)  # Move left
 
     def step(self, action):
+        '''
+        Take a step in the environment based on the action.
+        Params
+        action : int
+            Action to take.
+        Returns
+        observation : np.array
+            Observation after taking the step.
+        reward : int
+            Reward received after taking the step.
+        done : bool
+            Whether the episode is done.
+        info : dict
+            Additional information.
+        '''
         if self.done:
             raise RuntimeError("Step called after environment is done")
 
@@ -186,6 +268,12 @@ class SnakeEnv(gym.Env):
         return self._get_observation(), reward, self.done, {}
 
     def render(self, mode='human'):
+        '''
+        Render the environment.
+        Params
+        mode : str
+            Mode of rendering.
+        '''
         self.screen.fill((0, 0, 0))  # Fill screen with black
         
          # Draw grid lines
@@ -207,42 +295,18 @@ class SnakeEnv(gym.Env):
         self.clock.tick(10)  # Control the frame rate
 
     def close(self):
+        '''
+        Close the environment.
+        '''
         if self.interact:
             pygame.display.quit()
             pygame.quit()
 
-def human_mode():
-    env = SnakeEnv(grid_size=10)
-    env.reset()
-    
-    action = env.RIGHT  # Start with the RIGHT action
-
-    while True:  # Run until the user quits
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                env.close()
-                return
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_UP:
-                    action = env.UP
-                elif event.key == pygame.K_RIGHT:
-                    action = env.RIGHT
-                elif event.key == pygame.K_DOWN:
-                    action = env.DOWN
-                elif event.key == pygame.K_LEFT:
-                    action = env.LEFT
-                elif event.key == pygame.K_c and pygame.key.get_mods() & pygame.KMOD_CTRL:
-                    env.close()
-                    return
-        
-        observation, reward, done, info = env.step(action)
-        env.render()
-        time.sleep(0.5) 
-        
-        if done:
-            print("Game over!")
-            env.reset()
-
-
-if __name__ == "__main__":
-    human_mode()
+    def get_snake_length(self):
+        '''
+        Get the current length of the snake.
+        Returns
+        int
+            Length of the snake.
+        '''
+        return len(self.snake)
