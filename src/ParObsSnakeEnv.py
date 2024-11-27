@@ -3,7 +3,6 @@ import gymnasium as gym
 from gymnasium import spaces
 import random
 import pygame
-import time
 
 class SnakeEnv(gym.Env):
 
@@ -34,14 +33,19 @@ class SnakeEnv(gym.Env):
         self.grid_size = grid_size
         self.action_space = spaces.Discrete(4)  # 0: Up, 1: Right, 2: Down, 3: Left
         self.observation_space = spaces.Box(0, 1, (11,), dtype=np.float32)
+        self.directions = {
+            0: (-1, 0),  # Up
+            1: (0, 1),   # Right
+            2: (1, 0),   # Down
+            3: (0, -1)   # Left
+        }
         self.seed()
         self.reset()
         self.interact = interact
         self.food_reward = food_reward
         self.collision_reward = collision_reward
         self.final_reward = final_reward
-        self.direction = None
-
+    
         # Pygame initialization
         if self.interact:
             pygame.init()
@@ -99,18 +103,39 @@ class SnakeEnv(gym.Env):
         state : np.array
             Current state of the environment.
         '''
-        # Snake head position
         head_x, head_y = self.snake[0]
+        directions = self.directions 
+        danger_straight, danger_right, danger_left = self._get_danger(head_x, head_y, directions)
+        direction_up, direction_right, direction_down, direction_left = self._get_direction_one_hot()
+        food_up, food_down, food_left, food_right = self._get_food_direction(head_x, head_y)
 
-        # Direction vectors for movement
-        directions = {
-            0: (-1, 0),  # Up
-            1: (0, 1),   # Right
-            2: (1, 0),   # Down
-            3: (0, -1)   # Left
-        }
+        state = np.array([
+            danger_straight, danger_right, danger_left,
+            direction_up, direction_right, direction_down, direction_left,
+            food_up, food_down, food_left, food_right
+        ], dtype=np.float32)
 
-        # Danger detection (collision risk in each direction)
+        return state
+
+
+    def _get_danger(self, head_x, head_y, directions):
+        '''
+        Get the danger detection (collision risk in each direction).
+        Params
+        head_x : int
+            X-coordinate of the snake's head.
+        head_y : int
+            Y-coordinate of the snake's head.
+        directions : dict
+            Dictionary of direction vectors.
+        Returns
+        danger_straight : bool
+            Danger in the straight direction.
+        danger_right : bool
+            Danger in the right direction.
+        danger_left : bool
+            Danger in the left direction.
+        '''
         danger_straight = self._is_danger(head_x + directions[self.direction][0], head_y + directions[self.direction][1])
         danger_right = self._is_danger(
             head_x + directions[(self.direction + 1) % 4][0],
@@ -120,29 +145,54 @@ class SnakeEnv(gym.Env):
             head_x + directions[(self.direction - 1) % 4][0],
             head_y + directions[(self.direction - 1) % 4][1]
         )
+        return danger_straight, danger_right, danger_left
 
-        # Current direction (one-hot encoding)
-        direction_up = int(self.direction == 0)
-        direction_right = int(self.direction == 1)
-        direction_down = int(self.direction == 2)
-        direction_left = int(self.direction == 3)
+    def _get_direction_one_hot(self):
+        '''
+        Get the current direction in one-hot encoding.
+        Returns
+        direction_up : int
+            One-hot encoding for up direction.
+        direction_right : int
+            One-hot encoding for right direction.
+        direction_down : int
+            One-hot encoding for down direction.
+        direction_left : int
+            One-hot encoding for left direction.
+        '''
+        return (
+            int(self.direction == 0),
+            int(self.direction == 1),
+            int(self.direction == 2),
+            int(self.direction == 3)
+        )
 
-        # Food direction
+    def _get_food_direction(self, head_x, head_y):
+        '''
+        Get the direction of the food relative to the snake's head.
+        Params
+        head_x : int
+            X-coordinate of the snake's head.
+        head_y : int
+            Y-coordinate of the snake's head.
+        Returns
+        food_up : int
+            Food is up relative to the snake's head.
+        food_down : int
+            Food is down relative to the snake's head.
+        food_left : int
+            Food is left relative to the snake's head.
+        food_right : int
+            Food is right relative to the snake's head.
+        '''
         food_x, food_y = self.food
-        food_up = int(food_x < head_x)
-        food_down = int(food_x > head_x)
-        food_left = int(food_y < head_y)
-        food_right = int(food_y > head_y)
-
-        # Concatenate all features into a single state vector
-        state = np.array([
-            danger_straight, danger_right, danger_left,
-            direction_up, direction_right, direction_down, direction_left,
-            food_up, food_down, food_left, food_right
-        ], dtype=np.float32)
-
-        return state
-    
+        return (
+            int(food_x < head_x),
+            int(food_x > head_x),
+            int(food_y < head_y),
+            int(food_y > head_y)
+        )
+        
     def _is_danger(self, x, y):
         '''
         Helper function to check if a position is a danger (wall or snake body).
@@ -175,22 +225,6 @@ class SnakeEnv(gym.Env):
         '''
         return abs(position[0] - food_position[0]) + abs(position[1] - food_position[1])
 
-    def _change_direction(self, action):
-        '''
-        Change the direction of the snake based on the action.
-        Params
-        action : int
-            Action to change the direction.
-        '''
-        if action == self.UP:
-            self.direction = (-1, 0)  # Move up
-        elif action == self.RIGHT:
-            self.direction = (0, 1)   # Move right
-        elif action == self.DOWN:
-            self.direction = (1, 0)   # Move down
-        elif action == self.LEFT:
-            self.direction = (0, -1)  # Move left
-
     def step(self, action):
         '''
         Take a step in the environment based on the action.
@@ -211,6 +245,35 @@ class SnakeEnv(gym.Env):
             raise RuntimeError("Step called after environment is done")
 
         # Update direction
+        self._update_direction(action)
+
+        # Calculate new head position
+        new_head = self._get_new_head_position()
+
+        # Check for collisions
+        if self._check_collision(new_head):
+            self.done = True
+            return self._get_observation(), self.collision_reward, self.done, {}
+
+        # Update snake position
+        self._update_snake_position(new_head)
+
+        if len(self.free_cells) == 0:
+            self.done = True
+            return self._get_observation(), self.final_reward, self.done, {}
+
+        # Calculate distance-based reward
+        reward = self._calculate_reward(new_head)
+
+        return self._get_observation(), reward, self.done, {}
+
+    def _update_direction(self, action):
+        '''
+        Update the direction of the snake based on the action.
+        Params
+        action : int
+            Action to change the direction.
+        '''
         if action == 0 and self.direction != 2:  # Up
             self.direction = 0
         elif action == 1 and self.direction != 3:  # Right
@@ -220,7 +283,13 @@ class SnakeEnv(gym.Env):
         elif action == 3 and self.direction != 1:  # Left
             self.direction = 3
 
-        # Calculate new head position
+    def _get_new_head_position(self):
+        '''
+        Calculate the new head position of the snake.
+        Returns
+        new_head : tuple
+            New head position of the snake.
+        '''
         head_x, head_y = self.snake[0]
         if self.direction == 0:  # Up
             head_x -= 1
@@ -230,28 +299,41 @@ class SnakeEnv(gym.Env):
             head_x += 1
         elif self.direction == 3:  # Left
             head_y -= 1
+        return (head_x, head_y)
 
-        new_head = (head_x, head_y)
+    def _check_collision(self, new_head):
+        '''
+        Check if the new head position results in a collision.
+        Params
+        new_head : tuple
+            New head position of the snake.
+        Returns
+        bool
+            True if there is a collision, False otherwise.
+        '''
+        head_x, head_y = new_head
+        return head_x < 0 or head_y < 0 or head_x >= self.grid_size or head_y >= self.grid_size or new_head in self.snake
 
-        # Check for collisions
-        if (
-            head_x < 0 or head_y < 0 or
-            head_x >= self.grid_size or head_y >= self.grid_size or
-            new_head in self.snake
-        ):
-            self.done = True
-            return self._get_observation(), self.collision_reward, self.done, {}
-
-        # Update snake position
+    def _update_snake_position(self, new_head):
+        '''
+        Update the snake's position.
+        Params
+        new_head : tuple
+            New head position of the snake.
+        '''
         self.snake.insert(0, new_head)
         self.free_cells.remove(new_head)
 
-        if len(self.free_cells) == 0:
-            self.done = True
-            reward = self.final_reward
-            return self._get_observation(), reward, self.done, {}
-
-        # Calculate distance-based reward
+    def _calculate_reward(self, new_head):
+        '''
+        Calculate the reward based on the new head position.
+        Params
+        new_head : tuple
+            New head position of the snake.
+        Returns
+        reward : int
+            Reward received after taking the step.
+        '''
         current_distance = self._calculate_distance(new_head, self.food)
         distance_reward = self.previous_distance - current_distance
 
@@ -265,7 +347,7 @@ class SnakeEnv(gym.Env):
             reward = distance_reward
             self.previous_distance = current_distance  # Update the previous distance
 
-        return self._get_observation(), reward, self.done, {}
+        return reward
 
     def render(self, mode='human'):
         '''
