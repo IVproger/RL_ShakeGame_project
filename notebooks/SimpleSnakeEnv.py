@@ -151,6 +151,9 @@ class SimpleSnakeEnv(gym.Env):
             self.previous_distance = current_distance  # Update the previous distance
 
         return self._get_observation(), reward, self.done, {}
+    
+    def snake_length(self):
+        return len(self.snake)
 
     def render(self, mode='human'):
         for row in range(self.grid_size):
