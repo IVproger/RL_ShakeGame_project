@@ -4,7 +4,7 @@ from gymnasium import spaces
 import random
 import pygame
 
-class SnakeEnv(gym.Env):
+class FullobsSnakeEnv(gym.Env):
     
     # Define the actions
     UP = 0    #!< Move up
@@ -13,7 +13,7 @@ class SnakeEnv(gym.Env):
     LEFT = 3  #!< Move left
     
     def __init__(self, grid_size=10, food_reward=75, collision_reward=-75, final_reward=200, interact=True):
-        super(SnakeEnv, self).__init__()
+        super(FullobsSnakeEnv, self).__init__()
         self.grid_size = grid_size
         self.action_space = spaces.Discrete(4)  # 0: Up, 1: Right, 2: Down, 3: Left
         self.observation_space = spaces.Box(0, 1, (grid_size, grid_size, 2), dtype=np.float32)
@@ -64,8 +64,6 @@ class SnakeEnv(gym.Env):
 
     def _get_observation(self):
         obs = np.zeros((self.grid_size, self.grid_size, 2), dtype=np.float32)
-        
-         # TODO for the whole body ???
         for x, y in self.snake:
             obs[x, y] = [0, 1] 
         obs[self.food[0], self.food[1]] = [1, 0] 
@@ -164,7 +162,6 @@ class SnakeEnv(gym.Env):
         head_x, head_y = new_head
         return head_x < 0 or head_y < 0 or head_x >= self.grid_size or head_y >= self.grid_size or new_head in self.snake
     
-    # TODO Why 0 insert(0, new_head) ???
     def _update_snake_position(self, new_head):
         '''
         Update the snake's position.
