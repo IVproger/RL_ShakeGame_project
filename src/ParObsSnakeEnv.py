@@ -4,7 +4,7 @@ from gymnasium import spaces
 import random
 import pygame
 
-class SnakeEnv(gym.Env):
+class ParObsSnakeEnv(gym.Env):
 
     # Define the actions
     UP = 0    #!< Move up
@@ -27,7 +27,7 @@ class SnakeEnv(gym.Env):
         interact : bool
             Whether to enable interactive mode with Pygame.
         '''
-        super(SnakeEnv, self).__init__()
+        super(ParObsSnakeEnv, self).__init__()
         
         # Environment parameters
         self.grid_size = grid_size

@@ -3,9 +3,9 @@ import gymnasium as gym
 from gymnasium import spaces
 import random
 
-class SnakeEnv(gym.Env):
+class FullobsSnakeEnv(gym.Env):
     def __init__(self, grid_size=10, food_reward=10, collision_reward=-10, final_reward=100):
-        super(SnakeEnv, self).__init__()
+        super(FullobsSnakeEnv, self).__init__()
         self.grid_size = grid_size
         self.action_space = spaces.Discrete(4)  # 0: Up, 1: Right, 2: Down, 3: Left
         self.observation_space = spaces.Box(0, 1, (grid_size, grid_size, 3), dtype=np.float32)
