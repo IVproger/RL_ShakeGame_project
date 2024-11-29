@@ -62,7 +62,7 @@ We would like to thank the following open-source projects and their contributors
 - **[Vedant Goswami's Snake Game AI](https://github.com/vedantgoswami/SnakeGameAI/tree/main)**: This repository helped us explore additional perspectives on applying RL methods to the Snake game.  
 
 ## Contributors
-- **Ivan Golov**  
-- **Roman Makeev**  
-- **Maxim Martyshov**
+- **Ivan Golov** i.golov@innopolis.university  
+- **Roman Makeev** r.makeev@innopolis.university
+- **Maxim Martyshov** m.martyshov@innopolis.university
 ---
