@@ -7,11 +7,6 @@ This project was developed as part of the **Reinforcement Learning course at Inn
 ## Project Description
 The Snake game is a grid-based environment where the agent (snake) moves to eat food while avoiding collisions with itself or the boundaries. The goal is to use RL techniques to teach the agent to maximize its score by strategically selecting actions (up, down, left, right). The project involves simulating the game environment and applying multiple RL algorithms to find the optimal solution for the snake's behavior.
 
-## Contributors
-- **Ivan Golov**  
-- **Roman Makeev**  
-- **Maxim Martyshov**
-
 ## Environment Description
 The Snake game environment has been simulated using `Pygame`. The **state space** is represented by the snake’s body position, the location of the food, and additional features such as the distance to walls or potential collisions. The **action space** consists of four discrete movements: up, down, left, and right.
 
@@ -50,14 +45,24 @@ To set up and run the project locally, follow these steps:
    ```bash
    pip install -Ur requirements.txt
    ```
+   
+## References  
+- [Snake Game Genetic Algorithm with TensorFlow by Mauro Comi](https://github.com/maurock/snake-ga-tf/tree/master)  
+- [Deep Reinforcement Learning Algorithms by Rafael Sampaio](https://github.com/Rafael1s/Deep-Reinforcement-Learning-Algorithms/tree/master)  
+- [Snake Game AI by Vedant Goswami](https://github.com/vedantgoswami/SnakeGameAI/tree/main)  
+- [Study on RL Algorithms with Snake Game Implementation by Analytics Vidhya](https://medium.com/analytics-vidhya/study-on-rl-algorithms-with-snake-game-implementation-36bcdfda1bd4)  
+- [Teaching a Computer How to Play Snake with Q-Learning by Towards Data Science](https://towardsdatascience.com/teaching-a-computer-how-to-play-snake-with-q-learning-93d0a316ddc0)  
+- [Q-Learning: Teaching AI to Play Snake by 8th Light](https://8thlight.com/insights/qlearning-teaching-ai-to-play-snake)  
+- [Snaike: Building an AI-Powered Snake Game with Q-Learning by Tristan](https://medium.com/@tristan_4694/snaike-building-an-ai-powered-snake-game-with-q-learning-e146dc5ebd9c)  
 
-## References
-- [Snake Game Genetic Algorithm with TensorFlow by Mauro Comi](https://github.com/maurock/snake-ga-tf/tree/master)
-- [Deep Reinforcement Learning Algorithms by Rafael Sampaio](https://github.com/Rafael1s/Deep-Reinforcement-Learning-Algorithms/tree/master)
+## Acknowledgments  
+We would like to thank the following open-source projects and their contributors for their inspiration and valuable resources:  
+- **[Mauro Comi's Snake Game Genetic Algorithm with TensorFlow](https://github.com/maurock/snake-ga-tf)**: This project provided structural insights and inspiration for our approach.  
+- **[Rafael Sampaio's Deep Reinforcement Learning Algorithms](https://github.com/Rafael1s/Deep-Reinforcement-Learning-Algorithms)**: This repository offered guidance on implementing RL algorithms effectively.  
+- **[Vedant Goswami's Snake Game AI](https://github.com/vedantgoswami/SnakeGameAI/tree/main)**: This repository helped us explore additional perspectives on applying RL methods to the Snake game.  
 
-## Acknowledgments
-We would like to thank the following open-source projects for their inspiration and valuable resources:
-- **[Mauro Comi's Snake Game Genetic Algorithm with TensorFlow](https://github.com/maurock/snake-ga-tf)**: This project helped us understand the structure and strategy of applying algorithms to the Snake game.
-- **[Rafael Sampaio's Deep Reinforcement Learning Algorithms](https://github.com/Rafael1s/Deep-Reinforcement-Learning-Algorithms)**: This repository provided insights into the implementation of RL algorithms in Python.
-
+## Contributors
+- **Ivan Golov**  
+- **Roman Makeev**  
+- **Maxim Martyshov**
 ---
