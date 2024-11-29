@@ -4,6 +4,11 @@
 
 This project was developed as part of the **Reinforcement Learning course at Innopolis University (2024)**. It focuses on applying different RL algorithms to emulate and solve the classic Snake game. The algorithms implemented include Q-learning, SARSA, Deep Q-Network (DQN), and Policy Gradient (REINFORCE). The goal is to optimize the agent (snake) to maximize its score while experimenting with various reward functions and comparing the effectiveness of each algorithm.
 
+## Demo  
+Here’s a short demonstration of the Snake game using reinforcement learning:  
+
+![Snake Game Demo](https://github.com/IVproger/RL_ShakeGame_project/artifacts/demo.gif)
+
 ## Project Description
 The Snake game is a grid-based environment where the agent (snake) moves to eat food while avoiding collisions with itself or the boundaries. The goal is to use RL techniques to teach the agent to maximize its score by strategically selecting actions (up, down, left, right). The project involves simulating the game environment and applying multiple RL algorithms to find the optimal solution for the snake's behavior.
 
