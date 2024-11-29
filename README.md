@@ -1,3 +1,4 @@
+![header](/artifacts/header.png)
 ---
 
 # Snake Game with Reinforcement Learning
