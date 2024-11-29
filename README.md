@@ -5,8 +5,6 @@
 This project was developed as part of the **Reinforcement Learning course at Innopolis University (2024)**. It focuses on applying different RL algorithms to emulate and solve the classic Snake game. The algorithms implemented include Q-learning, SARSA, Deep Q-Network (DQN), and Policy Gradient (REINFORCE). The goal is to optimize the agent (snake) to maximize its score while experimenting with various reward functions and comparing the effectiveness of each algorithm.
 
 ## Demo  
-Here’s a short demonstration of the Snake game using reinforcement learning:  
-
 ![Snake Game Demo](/artifacts/demo.gif)
 
 ## Project Description
