@@ -1,6 +1,7 @@
 from tqdm import tqdm
+import json
 
-def compute_metrics(agent, env, num_simulations = 10) -> dict:
+def compute_metrics(agent, env, save_to, num_simulations = 10) -> dict:
     snake_lengths = []
     episode_rewards = []
 
@@ -22,5 +23,11 @@ def compute_metrics(agent, env, num_simulations = 10) -> dict:
         episode_rewards.append(episode_reward)
         print(f"Snake length: {snake_length}, Episode reward: {episode_reward}")
     
-    # return dictionary of metrics
-    return {'snake_lengths': snake_lengths, 'episode_rewards': episode_rewards}
+    # Create dictionary of metrics
+    results = {'snake_lengths': snake_lengths, 'episode_rewards': episode_rewards}
+    
+    # Save results to JSON file
+    with open(save_to, 'w') as f:
+        json.dump(results, f)
+
+    return results
