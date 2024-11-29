@@ -2,16 +2,16 @@ from tqdm import tqdm
 import json
 
 def compute_metrics(agent, env, save_to, num_simulations = 10) -> dict:
-    '''
-    Simulate the agent in the environment and compute metrics.
-    Parameters:
-        agent: Agent object
-        env: Environment object
-        save_to: Path to save the results
-        num_simulations: Number of simulations to run
-    Returns:
-        results: Dictionary containing the metrics of the agent
-    '''
+    # '''
+    # Simulate the agent in the environment and compute metrics.
+    # Parameters:
+    #     agent: Agent object
+    #     env: Environment object
+    #     save_to: Path to save the results
+    #     num_simulations: Number of simulations to run
+    # Returns:
+    #     results: Dictionary containing the metrics of the agent
+    # '''
     snake_lengths = []
     episode_rewards = []
 
