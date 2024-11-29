@@ -7,7 +7,7 @@ This project was developed as part of the **Reinforcement Learning course at Inn
 ## Demo  
 Here’s a short demonstration of the Snake game using reinforcement learning:  
 
-![Snake Game Demo](https://github.com/IVproger/RL_ShakeGame_project/artifacts/demo.gif)
+![Snake Game Demo](/artifacts/demo.gif)
 
 ## Project Description
 The Snake game is a grid-based environment where the agent (snake) moves to eat food while avoiding collisions with itself or the boundaries. The goal is to use RL techniques to teach the agent to maximize its score by strategically selecting actions (up, down, left, right). The project involves simulating the game environment and applying multiple RL algorithms to find the optimal solution for the snake's behavior.
