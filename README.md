@@ -20,14 +20,11 @@ Various reward functions have been explored, such as:
 - Distance-based rewards for approaching food
 
 ## RL Algorithms
-
-The following Reinforcement Learning algorithms have been implemented and compared in this project:
-
-Q-learning: A value-based method for model-free control.
-SARSA: On-policy version of Q-learning.
-Deep Q-Network (DQN): A neural network-based approach to approximate Q-values.
-Policy Gradient (REINFORCE): A policy-based method to directly learn the optimal policy.
-Actor-Critic Methods: Combines value-based and policy-based approaches by training both a policy (actor) and a value function (critic). This approach helps stabilize training and improve convergence.
+* Q-learning: A value-based method for model-free control.
+* SARSA: On-policy version of Q-learning.
+* Deep Q-Network (DQN): A neural network-based approach to approximate Q-values.
+* Policy Gradient (REINFORCE): A policy-based method to directly learn the optimal policy.
+* Actor-Critic Methods: Combines value-based and policy-based approaches by training both a policy (actor) and a value function (critic). This approach helps stabilize training and improve convergence.
 
 Each algorithm has been tested with various hyperparameters, and their performance has been compared based on the agent’s ability to maximize the score in the Snake game.
 ## Project Setup
