@@ -3,7 +3,7 @@
 
 # Snake Game with Reinforcement Learning
 
-This project was developed as part of the **Reinforcement Learning course at Innopolis University (2024)**. It focuses on applying different RL algorithms to emulate and solve the classic Snake game. The algorithms implemented include Q-learning, SARSA, Deep Q-Network (DQN), and Policy Gradient (REINFORCE). The goal is to optimize the agent (snake) to maximize its score while experimenting with various reward functions and comparing the effectiveness of each algorithm.
+This project was developed as part of the **Reinforcement Learning course at Innopolis University (2024)**. It focuses on applying different RL algorithms to emulate and solve the classic Snake game. The algorithms implemented include Q-learning, SARSA, Deep Q-Network (DQN), Policy Gradient (REINFORCE) and  Actor-Critic models. The goal is to optimize the agent (snake) to maximize its score while experimenting with various reward functions and comparing the effectiveness of each algorithm.
 
 ## Demo  
 ![Snake Game Demo](/artifacts/demo.gif)
@@ -20,14 +20,16 @@ Various reward functions have been explored, such as:
 - Distance-based rewards for approaching food
 
 ## RL Algorithms
+
 The following Reinforcement Learning algorithms have been implemented and compared in this project:
-1. **Q-learning**: A value-based method for model-free control.
-2. **SARSA**: On-policy version of Q-learning.
-3. **Deep Q-Network (DQN)**: A neural network-based approach to approximate Q-values.
-4. **Policy Gradient (REINFORCE)**: A policy-based method to directly learn the optimal policy.
+
+Q-learning: A value-based method for model-free control.
+SARSA: On-policy version of Q-learning.
+Deep Q-Network (DQN): A neural network-based approach to approximate Q-values.
+Policy Gradient (REINFORCE): A policy-based method to directly learn the optimal policy.
+Actor-Critic Methods: Combines value-based and policy-based approaches by training both a policy (actor) and a value function (critic). This approach helps stabilize training and improve convergence.
 
 Each algorithm has been tested with various hyperparameters, and their performance has been compared based on the agent’s ability to maximize the score in the Snake game.
-
 ## Project Setup
 To set up and run the project locally, follow these steps:
 
