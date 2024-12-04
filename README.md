@@ -38,7 +38,7 @@ To set up and run the project locally, follow these steps:
    git clone git@github.com:IVproger/RL_ShakeGame_project.git
    cd RL_ShakeGame_project
    ```
-2. **Create a virtual environment** (optional but recommended):
+2. **Run setup script**:
    ```bash
    bash scripts/setup.sh   
    ```
