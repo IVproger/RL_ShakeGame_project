@@ -41,3 +41,22 @@ def compute_metrics(agent, env, save_to, num_simulations = 10) -> dict:
         json.dump(results, f)
 
     return results
+
+def run_simulation(agent, env, num_simulations = 10):
+    '''
+    Simulate the agent in the environment.
+    Parameters:
+        agent: Agent object
+        env: Environment object
+        num_simulations: Number of simulations to run
+    '''
+    for _ in range(num_simulations):
+        state = env.reset()
+        done = False
+
+        while not done:
+            action, _ = agent.choose_action(state)
+            state, _, done, _ = env.step(action)
+            if env.interact:
+                env.render()
+    env.close()
