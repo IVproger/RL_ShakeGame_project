@@ -32,6 +32,18 @@ To set up and run the project locally, follow these steps:
 
 > **Note**: This project requires Python version **3.11 or higher**.
 
+### Variant №1
+1. **Clone the repository**:
+   ```bash
+   git clone git@github.com:IVproger/RL_ShakeGame_project.git
+   cd RL_ShakeGame_project
+   ```
+2. **Create a virtual environment** (optional but recommended):
+   ```bash
+   bash scripts/setup.sh   
+   ```
+
+### Variant №2
 1. **Clone the repository**:
    ```bash
    git clone git@github.com:IVproger/RL_ShakeGame_project.git
